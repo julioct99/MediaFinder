@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+body {
+    background: #232526;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #1d1e1f, #121414);
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #1d1e1f, #121414);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+    font-family: 'Roboto', sans-serif;
+    color: white;
+}
+
+h5 {
+    font-weight: bolder;
+}
+
+a {
+    color: #00a2ff;
+}
+
+i {
+    color: white;
+}
+
+a:hover {
+    text-decoration: none;
+    transition: 0.2s ease-in-out;
+    color: #fce205;
+    text-shadow: 0px 0px 5px black;
+}
+
+.card {
+    box-shadow: 9px 9px 12px 5px rgba(0, 0, 0, 0.36);
+}
+
+.card:hover {
+    box-shadow: 4px 4px 4px 2px #fce30581;
+    transition: 0.2s;
+}
+
+.icon {
+    width: 40px;
+}
+
+.score {
+    font-weight: bolder;
+    font-size: 1.75rem;
+}
+
+.hidden {
+    display: none;
+}
