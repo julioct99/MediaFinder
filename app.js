@@ -33,6 +33,7 @@ function clearUI() {
 }
 
 
+// Returns the HTML fragment of a score (IMDB, RottenTomatoes or Metacritic)
 function scoreHTML(image, score) {
     return `<div class="d-flex flex-column">
                 <div class="row justify-content-start align-items-center mb-2">
