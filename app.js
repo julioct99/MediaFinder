@@ -3,12 +3,12 @@
 //
 
 
-let deck = document.querySelector('#deck');
-let form = document.querySelector('#search-form');
-let loadingAnimation = document.querySelector('#loading');
-let searchBox = document.querySelector('#search');
-let messageContainer = document.querySelector('#message');
-let messageContent = document.querySelector('#message-content');
+const deck = document.querySelector('#deck');
+const form = document.querySelector('#search-form');
+const loadingAnimation = document.querySelector('#loading');
+const searchBox = document.querySelector('#search');
+const messageContainer = document.querySelector('#message');
+const messageContent = document.querySelector('#message-content');
 
 
 //
@@ -33,9 +33,19 @@ function clearUI() {
 }
 
 
+function scoreHTML(image, score) {
+    return `<div class="d-flex flex-column">
+                <div class="row justify-content-start align-items-center mb-2">
+                    <div class="col"><img class="icon" src=${image} alt="Score logo">
+                    </div>
+                    <div class="col"><span class="score">${score}</span></div>
+                </div>
+            </div>`;
+}
+
+
 // Load the ids of the items obtained from the given search query
 function loadIds(query) {
-
     axios
         .get(`http://www.omdbapi.com/?s=${query}&apikey=thewdb`)
         .then(res => {
@@ -48,7 +58,6 @@ function loadIds(query) {
             } else {
                 showMessage('No results found');
             }
-
         })
         .catch(err => console.log(err));
 }
@@ -73,9 +82,9 @@ function appendItem(item) {
 
     // Poster
     let poster = item["Poster"];
-    let posterFragment = ''; // HTML fragment for the poster of the card
+    let posterHTML = ''; // HTML fragment for the poster of the card
     if (poster !== 'N/A') {
-        posterFragment = `
+        posterHTML = `
             <div class="col-md-4">
                 <img src="${poster}" class="card-img" alt="Poster">
             </div>
@@ -83,61 +92,40 @@ function appendItem(item) {
     }
 
     // Imdb rating
-    let IMDBRating = item['imdbRating'];
+    let imdbRating = item['imdbRating'];
+    let imdbHTML = scoreHTML("img/imdb.png", imdbRating);
 
     // Rotten tomatoes rating
-    let RTRating = 'N/A';
-    let RTFragment = ''; // HTML fragment for the Rotten Tomatoes score
+    let rtRating = 'N/A';
+    let rtHTML = ''; // HTML fragment for the Rotten Tomatoes score
     if (item['Ratings'][1] !== undefined) {
-        RTRating = item['Ratings'][1]['Value'];
+        rtRating = item['Ratings'][1]['Value'];
     }
-    if (RTRating !== 'N/A') {
-        RTFragment = `
-                    <div class="d-flex flex-column">
-                        <div class="row justify-content-start align-items-center mb-2">
-                            <div class="col"><img class="icon" src="img/rotten_tomatoes.png"
-                                    alt="Rotten Tomatoes"></div>
-                            <div class="col"><span class="score score-yellow">${RTRating}</span></div>
-                        </div>
-                    </div>
-                    `;
+    if (rtRating !== 'N/A') {
+        rtHTML = scoreHTML("img/rotten_tomatoes.png", rtRating);
     }
 
     // Metascore rating
-    let MSRating = item['Metascore'];
-    let MSFragment = ''; // HTML fragment for the Metacritic score
-    if (MSRating !== 'N/A') {
-        MSFragment = `
-                    <div class="d-flex flex-column">
-                        <div class="row justify-content-start align-items-center mb-2">
-                            <div class="col"><img class="icon" src="img/metacritic.png" alt="Metacritic">
-                            </div>
-                            <div class="col"><span class="score score-yellow">${MSRating}</span></div>
-                        </div>
-                    </div>
-                    `;
+    let mcRating = item['Metascore'];
+    let mcHTML = ''; // HTML fragment for the Metacritic score
+    if (mcRating !== 'N/A') {
+        mcHTML = scoreHTML("img/metacritic.png", mcRating);
     }
-
 
     // Card element
     card.innerHTML = `
         <div class="card bg-dark mb-3" style="max-width: 540px;">
             <div class="row no-gutters"> ` +
-        `${posterFragment}` +
+        `${posterHTML}` +
         `    
                 <div class="col-md-8">
                     <div class="card-body">
                         <a href=https://www.imdb.com/title/${item["imdbID"]}><h5 class="card-title">${item['Title']}<span class="item-year">  (${item['Year']})</span></h5></a>
                         <p>${item['imdbVotes']} IMDB votes</p>
-                        <div class="d-flex flex-column">
-                            <div class="row justify-content-start align-items-center mb-2">
-                                <div class="col"><img class="icon" src="img/imdb.png" alt="IMDb"></div>
-                                <div class="col"><span class="score score-yellow">${IMDBRating}</span></div>
-                            </div>
-                        </div>
                         ` +
-        `${MSFragment}` +
-        `${RTFragment}` +
+        `${imdbHTML}` +
+        `${mcHTML}` +
+        `${rtHTML}` +
         `
                     </div>
                 </div>
