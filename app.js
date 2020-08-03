@@ -116,18 +116,15 @@ function appendItem(item) {
     // Card element
     card.innerHTML = `
         <div class="card bg-dark mb-3" style="max-width: 540px;">
-            <div class="row no-gutters"> ` +
-        `${posterHTML}` +
-        `    
+            <div class="row no-gutters">  
+            ${posterHTML} 
                 <div class="col-md-8">
                     <div class="card-body">
                         <a href=https://www.imdb.com/title/${item["imdbID"]}><h5 class="card-title">${item['Title']}<span class="item-year">  (${item['Year']})</span></h5></a>
                         <p>${item['imdbVotes']} IMDB votes</p>
-                        ` +
-        `${imdbHTML}` +
-        `${mcHTML}` +
-        `${rtHTML}` +
-        `
+                        ${imdbHTML}
+                        ${mcHTML} 
+                        ${rtHTML}  
                     </div>
                 </div>
             </div>
