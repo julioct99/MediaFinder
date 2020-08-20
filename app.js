@@ -52,9 +52,8 @@ function scoreHTML(image, score) {
 function loadIds(query) {
 
     let page = 1;
-    var exit = false;
 
-    while (!exit && page < 4) {
+    while (page < 4) {
         axios
             .get(`http://www.omdbapi.com/?s=${query}&apikey=thewdb&page=${page}`)
             .then(res => {
@@ -63,17 +62,12 @@ function loadIds(query) {
                     items.forEach((item, index) => {
                         loadItem(item["imdbID"]);
                     });
-                    exit = true;
                 } else {
                     showMessage('No results found');
                 }
             })
             .catch(err => {
                 console.log(err);
-                exit = true;
-            })
-            .finally(() => {
-                exit = true;
             });
         page++;
     }
