@@ -36,10 +36,13 @@ function clearUI() {
 // Returns the HTML fragment of a score (IMDB, RottenTomatoes or Metacritic)
 function scoreHTML(image, score) {
     return `<div class="d-flex flex-column">
-                <div class="row justify-content-start align-items-center mb-2">
-                    <div class="col"><img class="icon" src=${image} alt="Score logo">
+                <div class="row align-items-center mb-2">
+                    <div class="col">
+                        <img class="icon" src=${image} alt="Score logo">
                     </div>
-                    <div class="col"><span class="score">${score}</span></div>
+                    <div class="col">
+                        <span class="score">${score}</span>
+                    </div>
                 </div>
             </div>`;
 }
@@ -47,20 +50,33 @@ function scoreHTML(image, score) {
 
 // Load the ids of the items obtained from the given search query
 function loadIds(query) {
-    axios
-        .get(`http://www.omdbapi.com/?s=${query}&apikey=thewdb`)
-        .then(res => {
-            let items = res.data["Search"];
-            if (items) {
-                items.forEach((item, index) => {
-                    if (index < 9)
+
+    let page = 1;
+    var exit = false;
+
+    while (!exit && page < 4) {
+        axios
+            .get(`http://www.omdbapi.com/?s=${query}&apikey=thewdb&page=${page}`)
+            .then(res => {
+                let items = res.data["Search"];
+                if (items) {
+                    items.forEach((item, index) => {
                         loadItem(item["imdbID"]);
-                });
-            } else {
-                showMessage('No results found');
-            }
-        })
-        .catch(err => console.log(err));
+                    });
+                    exit = true;
+                } else {
+                    showMessage('No results found');
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                exit = true;
+            })
+            .finally(() => {
+                exit = true;
+            });
+        page++;
+    }
 }
 
 
@@ -86,9 +102,7 @@ function appendItem(item) {
     let posterHTML = ''; // HTML fragment for the poster of the card
     if (poster !== 'N/A') {
         posterHTML = `
-            <div class="col-md-4">
-                <img src="${poster}" class="card-img" alt="Poster">
-            </div>
+            <img src="${poster}" class="card-img-top" alt="Poster">
         `;
     }
 
@@ -115,17 +129,15 @@ function appendItem(item) {
 
     // Card element
     card.innerHTML = `
-        <div class="card bg-dark mb-3" style="max-width: 540px;">
+        <div class="card bg-dark mb-3" style="width: 18rem;">
             <div class="row no-gutters">  
             ${posterHTML} 
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <a href=https://www.imdb.com/title/${item["imdbID"]}><h5 class="card-title">${item['Title']}<span class="item-year">  (${item['Year']})</span></h5></a>
-                        <p>${item['imdbVotes']} IMDB votes</p>
-                        ${imdbHTML}
-                        ${mcHTML} 
-                        ${rtHTML}  
-                    </div>
+                <div class="card-body">
+                    <a href=https://www.imdb.com/title/${item["imdbID"]}><h5 class="card-title">${item['Title']}<span class="item-year">  (${item['Year']})</span></h5></a>
+                    <p>${item['imdbVotes']} IMDB votes</p>
+                    ${imdbHTML}
+                    ${mcHTML} 
+                    ${rtHTML}  
                 </div>
             </div>
         </div>

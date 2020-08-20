@@ -35,6 +35,8 @@ a:hover {
     box-shadow: 9px 9px 12px 5px rgba(0, 0, 0, 0.36);
 }
 
+
+
 .card:hover {
     box-shadow: 4px 4px 4px 2px #fce30581;
     transition: 0.2s;
