@@ -62,7 +62,7 @@ function loadIds(query) {
                     items.forEach((item, index) => {
                         loadItem(item["imdbID"]);
                     });
-                } else {
+                } else if (page === 1) {
                     showMessage('No results found');
                 }
             })
@@ -123,12 +123,12 @@ function appendItem(item) {
 
     // Card element
     card.innerHTML = `
-        <div class="card bg-dark mb-3" style="width: 18rem;">
-            <div class="row no-gutters">  
+        <div class="card bg-dark mb-3">
             ${posterHTML} 
-                <div class="card-body">
-                    <a href=https://www.imdb.com/title/${item["imdbID"]}><h5 class="card-title">${item['Title']}<span class="item-year">  (${item['Year']})</span></h5></a>
-                    <p>${item['imdbVotes']} IMDB votes</p>
+            <div class="card-body">
+                <a href=https://www.imdb.com/title/${item["imdbID"]}><h5 class="card-title">${item['Title']}<span class="item-year">  (${item['Year']})</span></h5></a>
+                <p>${item['imdbVotes']} IMDB votes</p>
+                <div class="d-flex justify-content-center align-items-center text-center">
                     ${imdbHTML}
                     ${mcHTML} 
                     ${rtHTML}  
